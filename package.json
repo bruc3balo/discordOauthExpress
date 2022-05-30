@@ -19,5 +19,8 @@
     "mongoose": "^6.3.4",
     "passport": "^0.6.0",
     "passport-discord": "^0.1.4"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.0.24"
   }
 }
