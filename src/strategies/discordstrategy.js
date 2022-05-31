@@ -1,17 +1,17 @@
-const DiscordStrategy = require('passport-discord').Strategy;
+const discStrategy = require('passport-discord').Strategy;
 const passport = require('passport');
-const DiscordUser = require('../models/DiscordUser');
+const discordUser = require('../models/DiscordUser');
 
 passport.serializeUser((user,done) => {
     done(null,user.id);
 });
 
 passport.deserializeUser(async(id,done) => {
-    const user = await DiscordUser.findById(id);
+    const user = await discordUser.findById(id);
     if(user) done(null,user);
 });
 
-passport.use(new DiscordStrategy({
+passport.use(new discStrategy({
 
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
@@ -20,12 +20,12 @@ passport.use(new DiscordStrategy({
 
 },async (_accessToken, _refreshToken, profile, done) => {
     try {
-        const user = await DiscordUser.findOne({discordId: profile.id});
+        const user = await discordUser.findOne({discordId: profile.id});
         console.log(`discord user is ${user}`);
         if(user) {
             done(null,user);
         } else {
-            const newUser = await DiscordUser.create({
+            const newUser = await discordUser.create({
                 discordId: profile.id,
                 username: profile.username
             });
@@ -39,6 +39,6 @@ passport.use(new DiscordStrategy({
         
     } catch (error) {
         console.log(error);
-        done(err,null);
+        done(error,null);
     }
 }));
